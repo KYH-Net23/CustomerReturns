@@ -1,0 +1,6 @@
+@ReturnProvider_HostAddress = http://localhost:5155
+
+GET {{ReturnProvider_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
