@@ -9,7 +9,7 @@ namespace ReturnProvider.Models.Entities
         public Guid UserId { get; set; }
         public string ReturnReason { get; set; }
         public string ResolutionType { get; set; }
-        public string Status { get; set; } // Requested, In Transit, Refunded
+        public string Status { get; set; } 
         public DateTime CreatedAt { get; set; }
     }
 }
