@@ -25,7 +25,6 @@ namespace ReturnProvider.Services
 
         public async Task<ValidationResult> ValidateReturnRequestAsync(ReturnRequestModel request)
         {
-            // Example validation logic
             var order = await _orderRepository.GetOrderByIdAsync(request.OrderId);
             if (order == null || !order.IsReturnable)
             {
@@ -55,7 +54,6 @@ namespace ReturnProvider.Services
             var returnRequest = await _returnRepository.GetReturnByIdAsync(returnId);
             if (returnRequest == null) return null;
 
-            // Example PDF generation logic
             return await GenerateLabelPdf(returnRequest);
         }
 
@@ -73,12 +71,10 @@ namespace ReturnProvider.Services
         {
             using (var memoryStream = new MemoryStream())
             {
-                // Initialize PDF writer and document
                 var writer = new PdfWriter(memoryStream);
                 var pdf = new PdfDocument(writer);
                 var document = new Document(pdf);
 
-                // Add title and content
                 document.Add(new Paragraph("Return Label")
                     .SetFontSize(20)
                     .SimulateBold());
@@ -100,7 +96,6 @@ namespace ReturnProvider.Services
                 document.Add(new Paragraph("1. Print this return label and include it in the package."));
                 document.Add(new Paragraph("2. Ship the package to the nearest return center."));
 
-                // Close the document
                 document.Close();
 
                 return memoryStream.ToArray();
