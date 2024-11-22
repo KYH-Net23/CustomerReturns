@@ -14,10 +14,9 @@ namespace ReturnProvider.Repositories
 
         public async Task<IEnumerable<OrderModel>> GetReturnableOrdersAsync(Guid userId)
         {
-            // Query returnable orders and include items (if required)
             var orders = await _context.Orders
                 .Where(o => o.UserId == userId && o.IsReturnable)
-                .Include(o => o.Items) // Assuming Items is a navigation property in OrderEntity
+                .Include(o => o.Items) 
                 .Select(o => new OrderModel
                 {
                     OrderId = o.OrderId,

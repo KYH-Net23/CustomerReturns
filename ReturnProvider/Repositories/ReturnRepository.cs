@@ -56,8 +56,8 @@ namespace ReturnProvider.Repositories
             return new ReturnStatusModel
             {
                 Status = entity.Status,
-                UpdatedAt = entity.CreatedAt, // Use UpdatedAt when available
-                StatusHistory = new List<string> { entity.Status } // Add actual status history if available
+                UpdatedAt = entity.CreatedAt, 
+                StatusHistory = new List<string> { entity.Status }
             };
         }
 
