@@ -18,7 +18,6 @@ namespace ReturnProvider.Controllers
             _returnService = returnService;
         }
 
-        // Retrieve eligible orders
         [HttpGet("eligible-orders/{userId}")]
         public async Task<IActionResult> GetEligibleOrders(Guid userId)
         {
@@ -32,7 +31,6 @@ namespace ReturnProvider.Controllers
         [HttpPost("submit")]
         public async Task<IActionResult> SubmitReturnRequest([FromBody] ReturnRequestModel returnRequest)
         {
-            // Check if the request is null
             if (returnRequest == null)
             {
                 return BadRequest("Request body is null.");
@@ -40,17 +38,10 @@ namespace ReturnProvider.Controllers
 
             try
             {
-                // Validate the return request
                 var validationResult = await _returnService.ValidateReturnRequestAsync(returnRequest);
-                //if (!string.IsNullOrEmpty(validationResult.ErrorMessage))
-                //{
-                //    return BadRequest(validationResult.ErrorMessage);
-                //}
 
-                // Submit the return request
                 var returnId = await _returnService.CreateReturnRequestAsync(returnRequest);
 
-                // Generate confirmation
                 return Ok(new
                 {
                     ReturnId = returnId,
@@ -59,14 +50,12 @@ namespace ReturnProvider.Controllers
             }
             catch (Exception ex)
             {
-                // Log exception for debugging
                 Console.WriteLine($"Error in SubmitReturnRequest: {ex.Message}");
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
 
 
-        // Generate a return label (PDF)
         [HttpGet("label/{returnId}")]
         public async Task<IActionResult> GenerateReturnLabel(Guid returnId)
         {
@@ -80,7 +69,6 @@ namespace ReturnProvider.Controllers
         }
 
 
-        // Track return status
         [HttpGet("status/{returnId}")]
         public async Task<IActionResult> TrackReturnStatus(Guid returnId)
         {
@@ -93,7 +81,6 @@ namespace ReturnProvider.Controllers
             return Ok(status);
         }
 
-        // Update return status (admin functionality)
         [HttpPatch("update-status/{returnId}")]
         public async Task<IActionResult> UpdateReturnStatus(Guid returnId, [FromBody] string status)
         {
