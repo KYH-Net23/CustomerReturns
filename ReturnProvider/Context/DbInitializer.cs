@@ -6,19 +6,15 @@ namespace ReturnProvider.Context
     {
         public static void Seed(ApplicationDbContext context)
         {
-            // Ensure the database is created
             context.Database.EnsureCreated();
 
-            // Sample Users
             var user1Id = Guid.Parse("11111111-1111-1111-1111-111111111111");
             var user2Id = Guid.Parse("22222222-2222-2222-2222-222222222222");
 
-            // Sample Orders
             var order1Id = Guid.Parse("33333333-3333-3333-3333-333333333333");
             var order2Id = Guid.Parse("44444444-4444-4444-4444-444444444444");
             var order3Id = Guid.Parse("55555555-5555-5555-5555-555555555555");
 
-            // Seed Orders with Items
             var testOrders = new List<OrderEntity>
             {
                 new OrderEntity
@@ -64,7 +60,7 @@ namespace ReturnProvider.Context
                 {
                     OrderId = order3Id,
                     UserId = user2Id,
-                    IsReturnable = false, // Non-returnable order
+                    IsReturnable = false, 
                     Items = new List<OrderItemEntity>
                     {
                         new OrderItemEntity
@@ -78,7 +74,6 @@ namespace ReturnProvider.Context
                 }
             };
 
-            // Seed Returns
             var testReturns = new List<ReturnEntity>
             {
                 new ReturnEntity
@@ -113,11 +108,9 @@ namespace ReturnProvider.Context
                 }
             };
 
-            // Add data to the context
             context.Orders.AddRange(testOrders);
             context.Returns.AddRange(testReturns);
 
-            // Save changes to the database
             context.SaveChanges();
         }
     }
