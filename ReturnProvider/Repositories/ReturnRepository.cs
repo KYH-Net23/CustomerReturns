@@ -1,76 +1,41 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ReturnProvider.Models;
+﻿using ReturnProvider.Models;
 using ReturnProvider.Models.Entities;
 
-namespace ReturnProvider.Repositories
+namespace ReturnProvider.Repositories;
+
+public class ReturnRepository(ApplicationDbContext context) : IReturnRepository
 {
-    public class ReturnRepository : IReturnRepository
+    public async Task<int?> CreateReturnAsync(ReturnModel returnRequest)
     {
-        private readonly ApplicationDbContext _context;
-
-        public ReturnRepository(ApplicationDbContext context)
+        var entity = new ReturnEntity
         {
-            _context = context;
-        }
+            OrderId = returnRequest.OrderId,
+            CustomerEmail = returnRequest.CustomerEmail,
+            ReturnReason = returnRequest.ReturnReason,
+            ResolutionType = returnRequest.ResolutionType,
+            Status = returnRequest.Status,
+            CreatedAt = returnRequest.CreatedAt
+        };
 
-        public async Task<Guid> CreateReturnAsync(ReturnModel returnRequest)
+        context.Returns.Add(entity);
+        await context.SaveChangesAsync();
+        return entity.Id;
+    }
+
+    public async Task<ReturnModel?> GetReturnByIdAsync(int returnId)
+    {
+        var entity = await context.Returns.FindAsync(returnId);
+        if (entity == null) return null;
+
+        return new ReturnModel
         {
-            var entity = new ReturnEntity
-            {
-                ReturnId = returnRequest.ReturnId,
-                OrderId = returnRequest.OrderId,
-                UserId = returnRequest.UserId,
-                ReturnReason = returnRequest.ReturnReason,
-                ResolutionType = returnRequest.ResolutionType,
-                Status = returnRequest.Status,
-                CreatedAt = returnRequest.CreatedAt
-            };
-
-            _context.Returns.Add(entity);
-            await _context.SaveChangesAsync();
-            return entity.ReturnId;
-        }
-
-        public async Task<ReturnModel?> GetReturnByIdAsync(Guid returnId)
-        {
-            var entity = await _context.Returns.FirstOrDefaultAsync(r => r.ReturnId == returnId);
-            if (entity == null) return null;
-
-            return new ReturnModel
-            {
-                ReturnId = entity.ReturnId,
-                OrderId = entity.OrderId,
-                UserId = entity.UserId,
-                ReturnReason = entity.ReturnReason,
-                ResolutionType = entity.ResolutionType,
-                Status = entity.Status,
-                CreatedAt = entity.CreatedAt
-            };
-        }
-
-        public async Task<ReturnStatusModel?> GetReturnStatusAsync(Guid returnId)
-        {
-            var entity = await _context.Returns.FirstOrDefaultAsync(r => r.ReturnId == returnId);
-            if (entity == null) return null;
-
-            return new ReturnStatusModel
-            {
-                Status = entity.Status,
-                UpdatedAt = entity.CreatedAt, 
-                StatusHistory = new List<string> { entity.Status }
-            };
-        }
-
-
-        public async Task<bool> UpdateReturnStatusAsync(Guid returnId, string status)
-        {
-            var entity = await _context.Returns.FirstOrDefaultAsync(r => r.ReturnId == returnId);
-            if (entity == null) return false;
-
-            entity.Status = status;
-            _context.Returns.Update(entity);
-            await _context.SaveChangesAsync();
-            return true;
-        }
+            Id = entity.Id,
+            OrderId = entity.OrderId,
+            CustomerEmail = entity.CustomerEmail,
+            ReturnReason = entity.ReturnReason,
+            ResolutionType = entity.ResolutionType,
+            Status = entity.Status,
+            CreatedAt = entity.CreatedAt
+        };
     }
 }
