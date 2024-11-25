@@ -1,15 +1,10 @@
 ﻿using ReturnProvider.Models;
-using System.ComponentModel.DataAnnotations;
 
-namespace ReturnProvider.Services
+namespace ReturnProvider.Services;
+
+public interface IReturnService
 {
-    public interface IReturnService
-    {
-        Task<IEnumerable<OrderModel>> GetEligibleOrdersAsync(Guid userId);
-        Task<ValidationResult> ValidateReturnRequestAsync(ReturnRequestModel request);
-        Task<Guid> CreateReturnRequestAsync(ReturnRequestModel request);
-        Task<byte[]> GenerateReturnLabelAsync(Guid returnId);
-        Task<ReturnStatusModel> GetReturnStatusAsync(Guid returnId);
-        Task<bool> UpdateReturnStatusAsync(Guid returnId, string status);
-    }
+    Task<int?> CreateReturnRequestAsync(ReturnModel returnRequest);
+    Task<ReturnModel?> GetReturnByIdAsync(int returnId);
+    Task<byte[]> GenerateLabelPdfAsync(int returnId);
 }
