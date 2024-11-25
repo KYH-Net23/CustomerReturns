@@ -1,13 +1,15 @@
-﻿namespace ReturnProvider.Models
+﻿using System.Text.Json.Serialization;
+
+namespace ReturnProvider.Models;
+
+public class ReturnModel
 {
-    public class ReturnModel
-    {
-        public Guid ReturnId { get; set; }
-        public Guid OrderId { get; set; }
-        public Guid UserId { get; set; }
-        public string ReturnReason { get; set; }
-        public string ResolutionType { get; set; } 
-        public string Status { get; set; }
-        public DateTime CreatedAt { get; set; }
-    }
+    [JsonIgnore]
+    public int Id { get; set; }
+    public int OrderId { get; set; }
+    public string CustomerEmail { get; set; } = null!;
+    public string ReturnReason { get; set; } = null!;
+    public string ResolutionType { get; set; } = null!;
+    public string Status { get; set; } = null!;
+    public DateTime CreatedAt { get; set; }
 }
